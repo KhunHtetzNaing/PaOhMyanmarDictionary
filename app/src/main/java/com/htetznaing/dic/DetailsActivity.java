@@ -1,11 +1,11 @@
-package com.htetznaing.paohmyanmardictionary;
+package com.htetznaing.dic;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.htetznaing.paohmyanmardictionary.DB.WordDBHelper;
-import com.htetznaing.paohmyanmardictionary.Model.Model;
+import com.htetznaing.dic.DB.WordDBHelper;
+import com.htetznaing.dic.Model.Model;
 
 import java.util.ArrayList;
 
@@ -111,7 +111,7 @@ public class DetailsActivity extends AppCompatActivity {
                         String shareBody = message;
                         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                         sharingIntent.setType("text/plain");
-                        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+                        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.app_name));
                         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
                         startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.app_name)));
                     }

@@ -1,4 +1,4 @@
-package com.htetznaing.paohmyanmardictionary;
+package com.htetznaing.app_updater;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.htetznaing.paohmyanmardictionary.Model;
+package com.htetznaing.dic.Model;
 
 public class Model {
     public String paoh,mm,count;

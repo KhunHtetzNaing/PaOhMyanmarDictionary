@@ -1,4 +1,4 @@
-package com.htetznaing.paohmyanmardictionary;
+package com.htetznaing.dic;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -8,26 +8,27 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SwitchCompat;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.SubMenu;
 import android.view.View;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
+import androidx.core.view.GravityCompat;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
+import com.google.android.material.navigation.NavigationView;
+import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -35,16 +36,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
-import com.htetznaing.paohmyanmardictionary.Adapter.Adapter;
-import com.htetznaing.paohmyanmardictionary.DB.DictionaryDBHelper;
-import com.htetznaing.paohmyanmardictionary.DB.WordDBHelper;
-import com.htetznaing.paohmyanmardictionary.Model.Model;
-import com.htetznaing.paohmyanmardictionary.Utils.AIOmmTool;
+import com.htetznaing.app_updater.AppUpdater;
+import com.htetznaing.dic.Adapter.Adapter;
+import com.htetznaing.dic.Checker.CheckInternet;
+import com.htetznaing.dic.DB.DictionaryDBHelper;
+import com.htetznaing.dic.DB.WordDBHelper;
+import com.htetznaing.dic.Model.Model;
+import com.htetznaing.dic.Utils.AIOmmTool;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,6 +64,9 @@ public class MainActivity extends AppCompatActivity
     SharedPreferences.Editor editor;
     Switch swichMyanmar;
     ProgressDialog progressDialog;
+
+    AppUpdater appUpdater;
+    CheckInternet checkInternet;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +75,8 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         setTitle("ပအိုဝ်ႏ - မြန်မာ");
 
+        appUpdater = new AppUpdater(this,getString(R.string.update_json_url));
+        checkInternet = new CheckInternet(this);
         progressDialog = new ProgressDialog(this);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = sharedPreferences.edit();
@@ -78,8 +85,14 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                String shareText = "PaOh - Myanmar Dictionary\n" +
+                        "Download Free at Google Play Store => https://play.google.com/store/apps/details?id="+getPackageName()+"\n" +
+                        "APKPure => https://apkpure.com/store/apps/details?id="+getPackageName();
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareText);
+                startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.app_name)));
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -265,7 +278,13 @@ public class MainActivity extends AppCompatActivity
     private void showAbout() throws PackageManager.NameNotFoundException {
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_about,null);
         final TextView tv_help=view.findViewById(R.id.tv_help),tv_app_name = view.findViewById(R.id.tv_app_name),tv_version=view.findViewById(R.id.tv_version),tv_devloper=view.findViewById(R.id.tv_developer),tv_helper=view.findViewById(R.id.tv_helper);
-
+        Button checkUpdate = view.findViewById(R.id.checkUpdate);
+        checkUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                appUpdater.check(true);
+            }
+        });
         tv_help.setText(getPaOhHelp());
         Switch myanmar = view.findViewById(R.id.myanmar);
         myanmar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -278,8 +297,8 @@ public class MainActivity extends AppCompatActivity
         });
 
         String version = getPackageManager().getPackageInfo(getPackageName(),0).versionName;
-        tv_app_name.setText(getString(R.string.app_name));
-        tv_version.setText(version);
+        tv_app_name.setText("Name: "+getString(R.string.app_name));
+        tv_version.setText("Version: "+version);
 
         tv_devloper.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -303,7 +322,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private String getPaOhHelp(){
-        return "Appအတွက်ပအိုဝ်ႏတွမ်ႏမန်းလိတ်စောင်းမꩻ \n" +
+        return "App အတွက်ပအိုဝ်ႏတွမ်ႏမန်းလိတ်စောင်းမꩻ \n" +
                 "ကထေတဲမ်းနယ်ထန်ႏလွေꩻဖေႏဒျာႏ\n" +
                 "ခွိုꩻရက်  မူႏလထေတဲမ်းနယ်သား\n" +
                 "ခွန်ထွန်းလှိုင်ဦးတွမ်ႏ \n" +
@@ -356,5 +375,14 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (checkInternet.isInternetOn()){
+            appUpdater.check(false);
+        }
     }
 }

@@ -1,12 +1,12 @@
-package com.htetznaing.paohmyanmardictionary.Adapter;
+package com.htetznaing.dic.Adapter;
 
 import android.app.AlertDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
-import com.htetznaing.paohmyanmardictionary.Constants;
-import com.htetznaing.paohmyanmardictionary.DetailsActivity;
-import com.htetznaing.paohmyanmardictionary.Model.Model;
-import com.htetznaing.paohmyanmardictionary.R;
+import com.htetznaing.dic.Constants;
+import com.htetznaing.dic.Model.Model;
+import com.htetznaing.dic.R;
 
 import java.util.ArrayList;
 
@@ -83,7 +82,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                         String shareBody = message;
                         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                         sharingIntent.setType("text/plain");
-                        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+                        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, context.getString(R.string.app_name));
                         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
                         context.startActivity(Intent.createChooser(sharingIntent, context.getResources().getString(R.string.app_name)));
                     }

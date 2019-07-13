@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "323625099206",
+    "firebase_url": "https://paoh-myanmar-dictionary.firebaseio.com",
+    "project_id": "paoh-myanmar-dictionary",
+    "storage_bucket": "paoh-myanmar-dictionary.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:323625099206:android:a5aaea31b0a3f8d5",
+        "android_client_info": {
+          "package_name": "com.htetznaing.dic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "323625099206-6hjse5ad80v033ssmesil9vqaagedj77.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2sgcuwqPwOtcKdAqJVjAtkmF-b6Bt1M4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "323625099206-6hjse5ad80v033ssmesil9vqaagedj77.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

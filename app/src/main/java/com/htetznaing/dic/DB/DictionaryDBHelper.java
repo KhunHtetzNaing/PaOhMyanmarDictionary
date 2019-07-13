@@ -1,33 +1,33 @@
-package com.htetznaing.paohmyanmardictionary.DB;
+package com.htetznaing.dic.DB;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.htetznaing.paohmyanmardictionary.Model.Model;
+import com.htetznaing.dic.Model.Model;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.util.ArrayList;
 
-public class WordDBHelper extends SQLiteAssetHelper {
-    private static final String DATABASE_NAME = "pao_mm_word.sqlite";
-    private static final String MAIN_DB = "မာတိကာ";
+public class DictionaryDBHelper extends SQLiteAssetHelper {
+    private static final String DATABASE_NAME = "pao_mm_dictionary.sqlite";
+    private static final String DB = "pao_mm_dictionary";
     private static final int DATABASE_VERSION = 1;
 
-    private static WordDBHelper dbHelper;
+    private static DictionaryDBHelper dbHelper;
     private SQLiteDatabase db;
 
     private Context mContext;
 
-    public WordDBHelper(Context context) {
+    public DictionaryDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.mContext = context;
     }
 
-    public static synchronized WordDBHelper getInstance(Context mContext) {
+    public static synchronized DictionaryDBHelper getInstance(Context mContext) {
         if (dbHelper == null) {
-            dbHelper = new WordDBHelper(mContext);
+            dbHelper = new DictionaryDBHelper(mContext);
         }
         return dbHelper;
     }
@@ -40,9 +40,9 @@ public class WordDBHelper extends SQLiteAssetHelper {
         this.db.close();
     }
 
-    public ArrayList<Model> getTableOfContents() throws SQLException {
+    public ArrayList<Model> searchWord(String word) throws SQLException {
         open();
-        String query = "SELECT * FROM '"+MAIN_DB+"'";
+        String query = "SELECT * FROM "+DB+" WHERE pao LIKE '%"+word+"%' OR mm LIKE '%"+word+"%'";
         Cursor c = this.db.rawQuery(query, null);
         ArrayList<Model> data = new ArrayList<>();
         try {
@@ -50,15 +50,11 @@ public class WordDBHelper extends SQLiteAssetHelper {
                 if (c.moveToFirst()) {
                     do {
                         Model model = new Model();
-                        String mm = c.getString(0);
                         String paoh = c.getString(1);
-                        String count = c.getString(2);
-                        if (mm!=null && !mm.isEmpty() && paoh!=null && !paoh.isEmpty()) {
-                            model.setMm(mm);
-                            model.setPaoh(paoh);
-                            model.setCount(count);
-                            data.add(model);
-                        }
+                        String mm = c.getString(2);
+                        model.setPaoh(paoh);
+                        model.setMm(mm);
+                        data.add(model);
                     } while (c.moveToNext());
                 }
             }
@@ -68,21 +64,21 @@ public class WordDBHelper extends SQLiteAssetHelper {
         return data;
     }
 
-    public ArrayList<Model> getByCategory(String category) throws SQLException {
+    public ArrayList<Model> getAll() throws SQLException {
         open();
-        String query = "SELECT * FROM '"+category+"'";
+        String query = "SELECT * FROM "+DB;
         Cursor c = this.db.rawQuery(query, null);
         ArrayList<Model> data = new ArrayList<>();
         try {
             if (c != null) {
                 if (c.moveToFirst()) {
                     do {
-                        String mm = c.getString(0);
+                        Model model = new Model();
                         String paoh = c.getString(1);
-                            Model model = new Model();
-                            model.setMm(mm);
-                            model.setPaoh(paoh);
-                            data.add(model);
+                        String mm = c.getString(2);
+                        model.setPaoh(paoh);
+                        model.setMm(mm);
+                        data.add(model);
                     } while (c.moveToNext());
                 }
             }

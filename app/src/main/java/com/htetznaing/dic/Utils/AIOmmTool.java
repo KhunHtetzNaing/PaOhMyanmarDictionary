@@ -1,4 +1,4 @@
-package com.htetznaing.paohmyanmardictionary.Utils;
+package com.htetznaing.dic.Utils;
 
 import android.content.Context;
 import android.view.ViewGroup;

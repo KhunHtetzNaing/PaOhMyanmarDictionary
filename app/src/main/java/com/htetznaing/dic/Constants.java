@@ -1,4 +1,4 @@
-package com.htetznaing.paohmyanmardictionary;
+package com.htetznaing.dic;
 
 import java.util.Random;
 

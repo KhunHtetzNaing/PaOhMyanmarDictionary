@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    android:padding="16dp"
+    android:paddingTop="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -16,7 +18,7 @@
         <Switch
             android:id="@+id/myanmar"
             android:layout_gravity="right"
-            android:text="မြန်မာ  "
+            android:text="မြန်မာ"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -38,7 +40,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <View
+        android:background="@android:color/darker_gray"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
     <TextView
+        android:layout_marginTop="5dp"
         android:id="@+id/tv_app_name"
         android:text="App Name: PaOh Myanmar Dictionary"
         android:layout_width="match_parent"
@@ -59,6 +67,13 @@
     <TextView
         android:id="@+id/tv_helper"
         android:text="Helper: Khun Naing Ko"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:layout_marginTop="5dp"
+        android:id="@+id/checkUpdate"
+        android:text="Check Update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
