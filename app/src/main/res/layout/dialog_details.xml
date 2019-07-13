@@ -7,6 +7,7 @@
     android:layout_height="wrap_content">
 
     <TextView
+        style="@style/AppTheme"
         android:textSize="18sp"
         android:text="မြန်မာ"
         android:id="@+id/text"

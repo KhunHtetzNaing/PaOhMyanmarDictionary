@@ -56,19 +56,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         viewHolder.paoh.setText(data.get(i).getPaoh());
         viewHolder.mm.setText(data.get(i).getMm());
         viewHolder.icon.setImageDrawable(TextDrawable.builder().buildRound(data.get(i).getMm().substring(0, 1), Constants.getColor()));
-        viewHolder.mm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDetail(data.get(i));
-            }
-        });
-        viewHolder.icon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDetail(data.get(i));
-            }
-        });
-        viewHolder.paoh.setOnClickListener(new View.OnClickListener() {
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDetail(data.get(i));

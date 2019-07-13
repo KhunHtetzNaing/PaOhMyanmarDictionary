@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:padding="16dp"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <ImageView
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/ic_launcher"
+        android:layout_width="70dp"
+        android:layout_height="70dp" />
+
+        <Switch
+            android:id="@+id/myanmar"
+            android:layout_gravity="right"
+            android:text="မြန်မာ  "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    <TextView
+        android:text="Appအတွက်ပအိုဝ်ႏတွမ်ႏမန်းလိတ်စောင်းမꩻ
+ကထေတဲမ်းနယ်ထန်ႏလွေꩻဖေႏဒျာႏ
+ခွိုꩻရက်  မူႏလထေတဲမ်းနယ်သား
+ခွန်ထွန်းလှိုင်ဦးတွမ်ႏ
+နျꩻတဲမ်းငီꩻဖေႏဒျာႏ ခွန်ကျော်စိန် သွꩻပေႏသီး ဝင်ꩻနီ
+ကေꩻဇူꩻတင်ႏငါႏမရေႏမရာႏသွူ ဩ"
+        android:id="@+id/tv_help"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:textColor="@android:color/black"
+        android:layout_marginTop="10dp"
+        android:text="About Application"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_app_name"
+        android:text="App Name: PaOh Myanmar Dictionary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_version"
+        android:text="Version: 1.0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_developer"
+        android:text="Developer: Khun Htetz Naing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_helper"
+        android:text="Helper: Khun Naing Ko"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

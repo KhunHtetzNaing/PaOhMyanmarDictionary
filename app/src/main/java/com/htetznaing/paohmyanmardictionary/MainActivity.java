@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -15,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.SubMenu;
 import android.view.View;
 import android.support.v4.view.GravityCompat;
@@ -29,6 +31,7 @@ import android.view.Menu;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
@@ -260,16 +263,72 @@ public class MainActivity extends AppCompatActivity
 
 
     private void showAbout() throws PackageManager.NameNotFoundException {
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_about,null);
+        final TextView tv_help=view.findViewById(R.id.tv_help),tv_app_name = view.findViewById(R.id.tv_app_name),tv_version=view.findViewById(R.id.tv_version),tv_devloper=view.findViewById(R.id.tv_developer),tv_helper=view.findViewById(R.id.tv_helper);
+
+        tv_help.setText(getPaOhHelp());
+        Switch myanmar = view.findViewById(R.id.myanmar);
+        myanmar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    tv_help.setText(getMyanmarHelp());
+                }else tv_help.setText(getPaOhHelp());
+            }
+        });
+
+        String version = getPackageManager().getPackageInfo(getPackageName(),0).versionName;
+        tv_app_name.setText(getString(R.string.app_name));
+        tv_version.setText(version);
+
+        tv_devloper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFb("100030031876000");
+            }
+        });
+
+
+        tv_helper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFb("100003911637398");
+            }
+        });
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setTitle("အကျောင်ꩻလံꩻ")
-                .setMessage("App Name: "+getString(R.string.app_name)+"\n\n"+
-                        "Version: "+getPackageManager().getPackageInfo(getPackageName(),0).versionName+"\n\n"+
-                        "Developer: Khun Htetz Naing\n\n" +
-                        "Translator: Khun Naing Ko")
-                .setPositiveButton("မွေးသွူ",null);
+                .setView(view)
+                .setPositiveButton("OK",null);
         builder.show();
     }
 
+    private String getPaOhHelp(){
+        return "Appအတွက်ပအိုဝ်ႏတွမ်ႏမန်းလိတ်စောင်းမꩻ \n" +
+                "ကထေတဲမ်းနယ်ထန်ႏလွေꩻဖေႏဒျာႏ\n" +
+                "ခွိုꩻရက်  မူႏလထေတဲမ်းနယ်သား\n" +
+                "ခွန်ထွန်းလှိုင်ဦးတွမ်ႏ \n" +
+                "နျꩻတဲမ်းငီꩻဖေႏဒျာႏ ခွန်ကျော်စိန် သွꩻပေႏသီး ဝင်ꩻနီ \n" +
+                "ကေꩻဇူꩻတင်ႏငါႏမရေႏမရာႏသွူ ဩ";
+    }
+
+    private void openFb(String userId){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        try {
+            intent.setData(Uri.parse("fb://profile/"+userId));
+            startActivity(intent);
+        } catch (Exception e) {
+            intent.setData(Uri.parse("https://m.facebook.com/"+userId));
+            startActivity(intent);
+        }
+    }
+
+    private String getMyanmarHelp(){
+        return "App အတွက် အချက်အလက်များအား\n" +
+                " မူရင်းရေးသားသူ မျိုꩻရက်ခွန်ထွန်းလှိုင်\n" +
+                "(ပအိုဝ်ႏတွမ်ႏမန်း ငေါဝ်းနီဘာႏသာႏ-စာအုပ်)နှင့်\n" +
+                " စာရိုက်ရာတွင် ကူညီရိုက်ပေးသူ ခွန်ကျော်စိန်တို့အား \n" +
+                "အထူးပင်ကျေးဇူးတင်အပ်ပါသည်။";
+    }
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
