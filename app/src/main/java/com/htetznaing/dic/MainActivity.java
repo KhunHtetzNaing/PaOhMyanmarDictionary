@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.SubMenu;
 import android.view.View;
@@ -28,9 +31,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,6 +72,9 @@ public class MainActivity extends AppCompatActivity
 
     AppUpdater appUpdater;
     CheckInternet checkInternet;
+    FloatingActionButton fab;
+    LinearLayout paoh_char_layout;
+    Button mai_ngar,mai_pat_ngar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +89,8 @@ public class MainActivity extends AppCompatActivity
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = sharedPreferences.edit();
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        initPaOhKB();
+        fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,13 +132,40 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 ArrayList<Model> temp = new ArrayList<>();
-                String unicode = AIOmmTool.getUnicode(s.toString());
-                if (isMmOrPaOh(s.toString())) {
+                String userInput = s.toString();
+
+                //Unicode Mai Ngar
+                if (userInput.contains("ꩻ")){
+                    userInput = userInput.replace("ꩻ","zMaiNgarz");
+                }
+
+                //Unicode Mai Pat Ngar
+                if (userInput.contains("ႏ")){
+                    userInput = userInput.replace("ႏ","zMaiPatNgarz");
+                }
+
+                //Zawgyi Mai Pat Ngar
+                if (userInput.contains("ၒ")){
+                    userInput = userInput.replace("ၒ","zMaiPatNgarz");
+                }
+
+                String unicode = AIOmmTool.getUnicode(userInput);
+
+                if (unicode.contains("zMaiNgarz")){
+                    unicode = unicode.replace("zMaiNgarz","ꩻ");
+                }
+
+                if (unicode.contains("zMaiPatNgarz")){
+                    unicode = unicode.replace("zMaiPatNgarz","ႏ");
+                }
+
+                System.out.println(unicode);
+                if (isMmOrPaOh(unicode)) {
                     temp = dictionaryDbHelper.searchWord(unicode);
                 }else{
                     String check = s.toString();
                     if (!check.isEmpty()) {
-                        Toast.makeText(MainActivity.this, "Myanmar Or PaOh Only", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Please input correct word!", Toast.LENGTH_SHORT).show();
                     }else temp = dictionaryDbHelper.getAll();
                 }
                 data.clear();
@@ -190,6 +226,45 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }.execute();
+        edit_query.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (keyboardShown(edit_query.getRootView())) {
+                    fab.hide();
+                    paoh_char_layout.setVisibility(View.VISIBLE);
+                } else {
+                    fab.show();
+                    paoh_char_layout.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    private void initPaOhKB() {
+        paoh_char_layout = findViewById(R.id.paoh_char_layout);
+        mai_ngar = findViewById(R.id.mai_ngar);
+        mai_ngar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edit_query.append("ꩻ");
+            }
+        });
+        mai_pat_ngar = findViewById(R.id.mai_pat_ngar);
+        mai_pat_ngar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edit_query.append("ႏ");
+            }
+        });
+    }
+
+    private boolean keyboardShown(View rootView) {
+        final int softKeyboardHeight = 100;
+        Rect r = new Rect();
+        rootView.getWindowVisibleDisplayFrame(r);
+        DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
+        int heightDiff = rootView.getBottom() - r.bottom;
+        return heightDiff > softKeyboardHeight * dm.density;
     }
 
     private void addPaOhTableOfContents(){

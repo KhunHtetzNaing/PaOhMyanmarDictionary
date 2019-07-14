@@ -10,15 +10,13 @@ import com.google.myanmartools.ZawgyiDetector;
 
 public class AIOmmTool {
     private static final ZawgyiDetector detector = new ZawgyiDetector();
-    private static final TransliterateZ2U zawgyi2Unicode = new TransliterateZ2U("Zawgyi to Unicode");
-    private static final TransliterateU2Z unicode2Zawgyi = new TransliterateU2Z("Unicode to Zawgyi");
 
     public static String zawgyi2Unicode(String input){
-        return zawgyi2Unicode.convert(input);
+        return Rabbit.zg2uni(input);
     }
 
     public static String unicode2Zawgyi(String input){
-        return unicode2Zawgyi.convert(input);
+        return Rabbit.uni2zg(input);
     }
 
     public static String getUnicode(String input){
@@ -28,14 +26,14 @@ public class AIOmmTool {
             return input;
         }else
             System.out.println("Zawgyi");
-        return zawgyi2Unicode.convert(input);
+        return Rabbit.zg2uni(input);
     }
 
     public static String getZawgyi(String input){
         double score = detector.getZawgyiProbability(input);
         if (score < 0.999){
             System.out.println("Unicode");
-            return unicode2Zawgyi.convert(input);
+            return Rabbit.uni2zg(input);
         }else
             System.out.println("Zawgyi");
         return input;
