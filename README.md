@@ -1,4 +1,7 @@
+
 # PaOhMyanmarDictionary
+
+### MOVED TO: https://github.com/KhunHtetzNaing/pao-myanmar-dictionary
 
 ပထမဦးဆုံး ပအိုဝ်း - မြန်မာ အဘိဓာန် Application လေးပါ။
 Database ကိုတော့ ခွန်နိုင်ကိုပေးပို့ထားတာပါ။
